@@ -1,0 +1,5 @@
+package detector
+
+object Trainer {
+  
+}
