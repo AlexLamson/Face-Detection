@@ -1,0 +1,27 @@
+TRAINING
+generate many random haar-like features
+for each image in the training set
+	for each haar-like feature
+		run the haar-like feature on the image
+		if feature was positive, add 1 to its counter
+for each haar-like feature
+	feature score = counter / # training images
+	if feature score is < 0.5
+		feature score = 1.0 - feature score
+		flip the black and white sides
+sort all the haar-like features in descending order by their score
+
+APPLYING
+for each block of pixel in the image
+	for each haar-like feature (in the now sorted order)
+		run the haar-like feature on the image
+		if it is positive and the last feature, mark the block
+		if it is positive and not the last feature, continue
+		if it is negative, move to the next block
+
+CLASSES
+Haar.scala - haar-like feature class
+Image.scala - image class
+Trainer.scala - object to teach the classifier
+File.scala - object to do file management
+Tester.scala - object to test the classifier
