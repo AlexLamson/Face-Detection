@@ -20,8 +20,9 @@ for each block of pixel in the image
 		if it is negative, move to the next block
 
 CLASSES
-Haar.scala - haar-like feature class
-Image.scala - image class
-Trainer.scala - object to teach the classifier
 File.scala - object to do file management
+Image.scala - image class
+IntegralImage.scala - class to represent summed area table
+Haar.scala - haar-like feature class
+Trainer.scala - object to teach the classifier
 Tester.scala - object to test the classifier
