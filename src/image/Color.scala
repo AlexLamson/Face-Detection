@@ -124,4 +124,3 @@ object Color{
   val white = c(JColor.white)
   val yellow = c(JColor.yellow)
 }
-
