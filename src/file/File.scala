@@ -7,6 +7,7 @@
  * add comments to all methods
  */
 
+package file
 
 import java.nio.file.Paths
 import java.nio.charset.StandardCharsets
@@ -17,6 +18,8 @@ import javax.imageio.ImageIO
 import java.io.IOException
 import scala.util.Random
 import scala.collection.JavaConversions._
+
+import image.Image
 
 object File{
   def readLines(filename:String) = Source.fromFile(filename).getLines

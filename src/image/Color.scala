@@ -7,6 +7,8 @@
  * add comments to all methods
  */
 
+package image
+
 import java.awt.{Color => JColor}
 
 class Color(val color:JColor){

@@ -7,9 +7,13 @@
  * add comments to object methods
  */
 
+package image
+
 import java.awt.image.{BufferedImage => BImage}
 import java.awt.{Color => JColor}
 import scala.collection.JavaConversions._
+
+import file._
 
 class Image(val img:BImage) extends Iterable[Color]{
   def this(w:Int, h:Int) = this(new BImage(w, h, BImage.TYPE_INT_RGB))
