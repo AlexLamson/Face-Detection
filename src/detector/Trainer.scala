@@ -1,5 +1,5 @@
 package detector
 
-object Trainer {
+object Trainer extends App {
   
 }
