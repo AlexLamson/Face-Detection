@@ -51,7 +51,7 @@ object Trainer extends App {
     println(feature.toString)
     
     //save the calculated feature to a file
-    File.appendToFile("features.txt", feature.toFileString)
+    File.appendToFile("features.txt", feature.toFileString+"\n")
   }
   
 //  choose the top 1000 features with the lowest error rates (this is the cascade)
