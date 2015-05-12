@@ -12,8 +12,9 @@ object Trainer extends App {
   
 //  for all possible haar-like features (or random, if there is a time constraint)
   //random haar-like features
-  println("generating features")
-  val haarList = (1 to 10).map( _ => Haar.randomHaar(19, 19) )
+  val numFeatures = 1000
+  println(s"generating $numFeatures random features")
+  val haarList = (1 to numFeatures).map( _ => Haar.randomHaar(19, 19) )
   
   val faceDir = "res/face_db_3/train/face"
   val faceFiles = File.getFilesIn( faceDir ).filter(File.isImage)
