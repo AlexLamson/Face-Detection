@@ -23,6 +23,8 @@ import scala.collection.JavaConversions._
 import image.Image
 
 object File{
+  def exists(filename:String) = toJFile("").exists
+  
   def readLines(filename:String) = Source.fromFile(filename).getLines
   def toFile(filename:String, str:String):Unit = 
     Files.write(Paths.get(filename), bytes(str))
