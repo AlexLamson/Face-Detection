@@ -22,8 +22,10 @@ object Trainer extends App {
   val nonFaceDir = "res/face_db_3/train/non-face"
   val nonFaceFiles = File.getFilesIn( nonFaceDir ).filter(File.isImage)
   
-  for(feature <- haarList){
-      println(feature.toString)
+  for((feature, index) <- haarList.zipWithIndex){
+    if(index % 10 == 0) println((100.0*index/numFeatures)+"% done")
+    
+    println(feature.toString)
   
 //    for each positive image in the training set
 //      run the haar-like feature on the image
