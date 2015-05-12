@@ -2,6 +2,10 @@ package detector
 
 import file._
 
+//NOTE: maximum detector window size is 3960 by 3960, 
+//given that the brightness differences given by the 
+//haar-like features are stored in ints
+
 object Trainer extends App {
 //  for all possible haar-like features (or random, if there is a time constraint)
 //  for each positive image in the training set
