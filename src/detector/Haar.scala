@@ -18,12 +18,12 @@ sealed class Rect(val x:Int, val y:Int, val width:Int, val height:Int){
 abstract class Haar(val r:Rect, 
     val hasHorzStripes:Boolean, 
     val hasTwoStripes:Boolean,
-    var whiteFirst:Boolean = true){
+    var whiteFirst:Boolean = true,
+    var threshold:Int = 0,
+    var weight:Double = 0.5){
   
   def polarity = if(whiteFirst) 1 else -1
   
-  var threshold = 0
-  var weight = 0.5
   
   //white area minus black area
   def calcDifference(img:IntegralImage, dx:Int, dy:Int):Int
@@ -43,6 +43,15 @@ abstract class Haar(val r:Rect,
     weight = 1.0-percentErrors //not totally sure about this part
   }
   
+  def toFileString:String = {
+    val dir = if(hasHorzStripes) "H" else "V"
+    val num = if(hasTwoStripes) "2" else "3"
+    val wht = if(whiteFirst) "W" else "B"
+    val (x, y, w, h) = (r.x, r.y, r.width, r.height)
+    def f(i:Double) = "%2.2f" format i
+    s"$dir $num $wht $x $y $w $h t:$threshold w:${f(weight)}"
+  }
+  
   override def toString = {
     val dir = if(hasHorzStripes) "H" else "V"
     val num = if(hasTwoStripes) "2" else "3"
@@ -53,6 +62,10 @@ abstract class Haar(val r:Rect,
   }
 }
 object Haar {
+  
+  def fromFileString(fileString:String):Haar = {
+    ???
+  }
   
   //given diff values (made by a single haar-like feature) for faces and non-faces, 
   //  determine a threshold to separate the two
