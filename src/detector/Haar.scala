@@ -12,6 +12,13 @@ package detector
 
 sealed class Rect(val x:Int, val y:Int, val width:Int, val height:Int){
   override def toString = s"($x, $y, $width, $height)"
+  override def equals(that:Any) = {
+    that match {
+      case that:Rect => that.x==x && that.y==y &&
+        that.width==width && that.height==height
+      case _ => false
+    }
+  }
 }
 
 //generic haar-like feature
@@ -58,6 +65,16 @@ abstract class Haar(val r:Rect,
     val rect = r.toString
     def f(i:Double) = "%2.2f" format i
     s"$dir$num$white$rect t:$threshold w:${f(weight)}"
+  }
+  
+  override def equals(that:Any) = {
+    that match {
+      case that:Haar => that.r==r &&
+        that.hasHorzStripes==hasHorzStripes &&
+        that.hasTwoStripes==hasTwoStripes &&
+        that.whiteFirst==whiteFirst
+      case _ => false
+    }
   }
 }
 object Haar {
