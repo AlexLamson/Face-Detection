@@ -1,15 +1,16 @@
 package detector
 
+import file._
+
 object Trainer extends App {
-//    generate many random haar-like features
-//  for each image in the training set
-//    for each haar-like feature
-//      run the haar-like feature on the image
-//      if feature was positive, add 1 to its counter
-//  for each haar-like feature
-//    feature score = counter / # training images
-//    if feature score is < 0.5
-//      feature score = 1.0 - feature score
-//      flip the black and white sides
-//  sort all the haar-like features in descending order by their score
+//  for all possible haar-like features (or random, if there is a time constraint)
+//  for each positive image in the training set
+//    run the haar-like feature on the image
+//    add the calculated difference to a positive list
+//  for each negative image in the training set
+//    run the haar-like feature on the image
+//    add the calculated difference to a negative list
+//  calculate a threshold such that the number of errors is minimized
+//    (also flip the black and white side if necessary)
+//  choose the top 1000 features with the lowest error rates (this is the cascade)
 }
