@@ -27,9 +27,10 @@ object Tester extends App {
   
   /////////////////////////////////////////////////
   
-  def printIndex(index:Int, length:Int) {
-    if(index % 1000 == 0) println( "%2.4f" format (1.0*index/length) )
-  }
+  def formatPercent(index:Int, length:Int) =
+    ("%2.4f" format (1.0*index/length*100))+"%"
+  def printPercent(index:Int, length:Int) =
+    if(index % 1000 == 0) println( formatPercent(index, length) )
   
   println("testing faces")
   val faceResults = for{
@@ -37,7 +38,7 @@ object Tester extends App {
     original = File.readImage(faceFile)
     intImg = new IntegralImage(original)
     isFace = sortedFeatures.forall { _.isFaceFeature(intImg) }
-    _=printIndex(i, faceFiles.length)
+    _=printPercent(i, faceFiles.length)
   } yield isFace
   
   println("testing non-faces")
@@ -46,17 +47,19 @@ object Tester extends App {
     original = File.readImage(nonFaceFile)
     intImg = new IntegralImage(original)
     isFace = sortedFeatures.forall { _.isFaceFeature(intImg) }
-    _=printIndex(i, nonFaceFiles.length)
+    _=printPercent(i, nonFaceFiles.length)
   } yield isFace
   
+  
+  val numFiles = faceFiles.length + nonFaceFiles.length
   val falseNegatives = faceResults.count { _ == false }
   val falsePositives = nonFaceResults.count { _ == true }
   val errors = falseNegatives + falsePositives
-  val errorPercent = 1.0*errors/(faceFiles.length + nonFaceFiles.length)
-  val nonErrors = faceFiles.length + nonFaceFiles.length - errors
+  val errorPercent = 1.0*errors/numFiles
+  val nonErrors = numFiles - errors
   
   println("-"*20)
-  println("accuracy: "+ ("%2.5f" format (1.0-errorPercent)))
+  println("accuracy: "+ formatPercent(nonErrors, numFiles))
   println("non-errors: "+nonErrors)
   println("errors: "+errors)
   println("false negatives: "+falseNegatives)
