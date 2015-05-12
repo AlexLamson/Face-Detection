@@ -26,12 +26,11 @@ abstract class Haar(val r:Rect,
   
   
   //white area minus black area
-  def calcDifference(img:IntegralImage, dx:Int, dy:Int):Int
-  def calcDifference(img:IntegralImage):Int = calcDifference(img, 0, 0)
+  def calcDifference(img:IntegralImage, dx:Int = 0, dy:Int = 0):Int
   
   def isFaceFeature(diff:Int):Boolean = diff*polarity < threshold*polarity
-  def isFaceFeature(img:IntegralImage):Boolean = 
-    isFaceFeature(calcDifference(img))
+  def isFaceFeature(img:IntegralImage, dx:Int = 0, dy:Int = 0):Boolean = 
+    isFaceFeature(calcDifference(img, dx, dy))
   
   def update(faceList:List[Int], nonFaceList:List[Int]) {
     val (threshold, polarity, percentErrors) = Haar.getThresholdAndPolarityAndError(faceList, nonFaceList)

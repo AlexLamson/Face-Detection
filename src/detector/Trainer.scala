@@ -49,9 +49,17 @@ object Trainer extends App {
     feature.update(faceDiffs, nonFaceDiffs)
     
     println(feature.toString)
+    
+    //save the calculated feature to a file
+    File.appendToFile("features.txt", feature.toFileString)
   }
   
 //  choose the top 1000 features with the lowest error rates (this is the cascade)
+  val sortedFeatures = haarList.sortBy { x => 1.0-x.weight }.filter(_.weight > 0.5)
+  println("-"*20)
+  println("sorted list of features")
+  println("-"*20)
+  sortedFeatures.foreach { println }
   
   val endTime = System.currentTimeMillis
   println("program finished in "+(endTime-startTime)+" ms")
