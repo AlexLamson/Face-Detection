@@ -46,25 +46,32 @@ abstract class Haar(val r:Rect,
   def toFileString:String = {
     val dir = if(hasHorzStripes) "H" else "V"
     val num = if(hasTwoStripes) "2" else "3"
-    val wht = if(whiteFirst) "W" else "B"
+    val white = if(whiteFirst) "W" else "B"
     val (x, y, w, h) = (r.x, r.y, r.width, r.height)
     def f(i:Double) = "%2.2f" format i
-    s"$dir $num $wht $x $y $w $h t:$threshold w:${f(weight)}"
+    s"$dir $num $white $x $y $w $h t:$threshold w:${f(weight)}"
   }
   
   override def toString = {
     val dir = if(hasHorzStripes) "H" else "V"
     val num = if(hasTwoStripes) "2" else "3"
-    val wht = if(whiteFirst) "W" else "B"
+    val white = if(whiteFirst) "W" else "B"
     val rect = r.toString
     def f(i:Double) = "%2.2f" format i
-    s"$dir$num$wht$rect t:$threshold w:${f(weight)}"
+    s"$dir$num$white$rect t:$threshold w:${f(weight)}"
   }
 }
 object Haar {
   
   def fromFileString(fileString:String):Haar = {
-    ???
+    
+    val vars = fileString.split(" ")
+    val (dir, num, white, x, y, w, h, threshold, weight) = 
+      (vars(0), vars(1), vars(2), vars(3), vars(4), 
+          vars(5), vars(6), vars(7), vars(8))
+    val rect = new Rect(x.toInt, y.toInt, w.toInt, h.toInt)
+    Haar(rect, dir=="H", num=="2", white=="W",
+        threshold.toInt, weight.toDouble)
   }
   
   //given diff values (made by a single haar-like feature) for faces and non-faces, 
@@ -140,18 +147,25 @@ object Haar {
     Haar(r, hasHorzStripes, hasTwoStripes)
   }
   
-  def apply(r:Rect, hasHorzStripes:Boolean, hasTwoStripes:Boolean) = {
+  def apply(r:Rect, 
+    hasHorzStripes:Boolean, 
+    hasTwoStripes:Boolean,
+    whiteFirst:Boolean = true,
+    threshold:Int = 0,
+    weight:Double = 0.5):Haar = {
     (hasHorzStripes, hasTwoStripes) match {
-      case (true, true) => new HaarH2(r)
-      case (false, true) => new HaarV2(r)
-      case (true, false) => new HaarH3(r)
-      case (false, false) => new HaarV3(r)
+      case (true, true) => new HaarH2(r, whiteFirst, threshold, weight)
+      case (false, true) => new HaarV2(r, whiteFirst, threshold, weight)
+      case (true, false) => new HaarH3(r, whiteFirst, threshold, weight)
+      case (false, false) => new HaarV3(r, whiteFirst, threshold, weight)
     }
   }
 }
 
 //haar-like feature with 2 horizontal stripes
-class HaarH2(r:Rect) extends Haar(r, true, true) {
+class HaarH2(r:Rect,
+    whiteFirst:Boolean = true, threshold:Int = 0, weight:Double = 0.5)
+    extends Haar(r, true, true, whiteFirst, threshold, weight) {
   override def calcDifference(img:IntegralImage, dx:Int, dy:Int) = {
     val A = img.sumRegion(r.x+dx, r.y+dy, r.width, r.height/2)
     val B = img.sumRegion(r.x+dx, r.y+r.height/2+dy, r.width, r.height/2)
@@ -161,7 +175,9 @@ class HaarH2(r:Rect) extends Haar(r, true, true) {
 }
 
 //haar-like feature with 2 vertical stripes
-class HaarV2(r:Rect) extends Haar(r, false, true) {
+class HaarV2(r:Rect,
+    whiteFirst:Boolean = true, threshold:Int = 0, weight:Double = 0.5)
+    extends Haar(r, false, true, whiteFirst, threshold, weight) {
   override def calcDifference(img:IntegralImage, dx:Int, dy:Int) = {
     val A = img.sumRegion(r.x+dx, r.y+dy, r.width/2, r.height)
     val B = img.sumRegion(r.x+r.width/2+dx, r.y+dy, r.width/2, r.height)
@@ -171,7 +187,9 @@ class HaarV2(r:Rect) extends Haar(r, false, true) {
 }
 
 //haar-like feature with 3 horizontal stripes
-class HaarH3(r:Rect) extends Haar(r, true, false) {
+class HaarH3(r:Rect,
+    whiteFirst:Boolean = true, threshold:Int = 0, weight:Double = 0.5)
+    extends Haar(r, true, false, whiteFirst, threshold, weight) {
   override def calcDifference(img:IntegralImage, dx:Int, dy:Int) = {
     val A = img.sumRegion(r.x+dx, r.y+dy, r.width, r.height/3) + 
       img.sumRegion(r.x+dx, r.y+2*r.height/3+dy, r.width, r.height/3)
@@ -182,7 +200,9 @@ class HaarH3(r:Rect) extends Haar(r, true, false) {
 }
 
 //haar-like feature with 3 vertical stripes
-class HaarV3(r:Rect) extends Haar(r, false, false) {
+class HaarV3(r:Rect,
+    whiteFirst:Boolean = true, threshold:Int = 0, weight:Double = 0.5)
+    extends Haar(r, false, false, whiteFirst, threshold, weight) {
   override def calcDifference(img:IntegralImage, dx:Int, dy:Int) = {
     val A = img.sumRegion(r.x+dx, r.y+dy, r.width/3, r.height) + 
       img.sumRegion(r.x+2*r.width/3+dx, r.y+dy, r.width/3, r.height)
