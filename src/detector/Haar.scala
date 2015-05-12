@@ -34,7 +34,7 @@ abstract class Haar(val r:Rect,
     val white = if(whiteFirst) "W" else "B"
     val (x, y, w, h) = (r.x, r.y, r.width, r.height)
     def f(i:Double) = "%2.2f" format i
-    s"$dir $num $white $x $y $w $h t:$threshold w:${f(weight)}"
+    s"$dir $num $white $x $y $w $h $threshold ${f(weight)}"
   }
   
   override def toString = {
