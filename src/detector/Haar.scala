@@ -157,7 +157,7 @@ object Haar {
   }
 }
 
-sealed class Rect(val x:Int, val y:Int, val width:Int, val height:Int){
+class Rect(val x:Int, val y:Int, val width:Int, val height:Int){
   override def toString = s"($x, $y, $width, $height)"
   override def equals(that:Any) = {
     that match {
