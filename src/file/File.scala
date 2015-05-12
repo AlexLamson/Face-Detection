@@ -12,6 +12,7 @@ package file
 import java.nio.file.Paths
 import java.nio.charset.StandardCharsets
 import java.nio.file.Files
+import java.io.FileWriter
 import scala.io.Source
 import java.io.{File => JFile}
 import javax.imageio.ImageIO
@@ -23,7 +24,13 @@ import image.Image
 
 object File{
   def readLines(filename:String) = Source.fromFile(filename).getLines
-  def toFile(filename:String, str:String):Unit = Files.write(Paths.get(filename), bytes(str))
+  def toFile(filename:String, str:String):Unit = 
+    Files.write(Paths.get(filename), bytes(str))
+  def appendToFile(filename:String, str:String):Unit = {
+    val fw = new FileWriter(filename, true)
+    try { fw.write(str) }
+    finally fw.close()
+  }
   
   def readImage(file:JFile):Image = new Image(ImageIO.read(file))
   def readImage(filename:String):Image = readImage(toJFile(filename))
