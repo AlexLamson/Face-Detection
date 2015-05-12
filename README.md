@@ -1,7 +1,7 @@
 # Face-Detection
 Detect a face in a given image using Scala with no external libraries
 
-# File descriptions
+## File descriptions
 * Sampler - Runs the detector on a given image
 * Tester - Tests the reliability of the trained classifier
 * Trainer - Trains the classifier using a database of sample faces and non-faces
