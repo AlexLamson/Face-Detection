@@ -20,18 +20,20 @@ abstract class Haar(val r:Rect,
     val hasTwoStripes:Boolean,
     var whiteFirst:Boolean = true){
   
-  var threshold = 0.5
+  def polarity = if(whiteFirst) 1 else -1
+  
+  var threshold = 0
   var weight = 0.5
   
   //white area minus black area
   def calcDifference(img:IntegralImage, dx:Int, dy:Int):Int
   def calcDifference(img:IntegralImage):Int = calcDifference(img, 0, 0)
   
-  def isFaceFeature(diff:Int):Boolean = diff < threshold
+  def isFaceFeature(diff:Int):Boolean = diff*polarity < threshold*polarity
   def isFaceFeature(img:IntegralImage):Boolean = 
     isFaceFeature(calcDifference(img))
   
-  def update(faceList:List[Int], nonFaceList:List[Int]):Unit = {
+  def update(faceList:List[Int], nonFaceList:List[Int]) {
     val (threshold, polarity, percentErrors) = Haar.getThresholdAndPolarityAndError(faceList, nonFaceList)
     
     this.threshold = threshold
@@ -39,6 +41,15 @@ abstract class Haar(val r:Rect,
     if(polarity == -1) whiteFirst = !whiteFirst
     
     weight = 1.0-percentErrors //not totally sure about this part
+  }
+  
+  override def toString = {
+    val dir = if(hasHorzStripes) "H" else "V"
+    val num = if(hasTwoStripes) "2" else "3"
+    val wht = if(whiteFirst) "W" else "B"
+    val rect = r.toString
+    def f(i:Double) = "%2.2f" format i
+    s"$dir$num$wht$rect t:$threshold w:${f(weight)}"
   }
 }
 object Haar {
