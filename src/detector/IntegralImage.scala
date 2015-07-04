@@ -40,10 +40,10 @@ class IntegralImage(var arr:Array[Array[Int]]) {
     
     val (w,h) = (this.width, this.height)
     
-    assert(x >= 0, s"x: $x width: $width w:$w")
-    assert(x+width < this.width, s"x: $x width: $width w:$w")
-    assert(y >= 0, s"y: $y height: $height h:$h")
-    assert(y+height < this.height, s"y: $y height: $height h:$h")
+    assert(x >= 0, s"x: $x width: $width w: $w")
+    assert(x+width < this.width, s"x: $x width: $width w: $w")
+    assert(y >= 0, s"y: $y height: $height h: $h")
+    assert(y+height < this.height, s"y: $y height: $height h: $h")
     
     //AB
     //CD
