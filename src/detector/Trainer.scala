@@ -10,6 +10,8 @@ object Trainer extends App {
   println("trainer starting")
   val startTime = System.currentTimeMillis
   
+  val filename = "features.txt"
+  
 //  for all possible haar-like features (or random, if there is a time constraint)
   //random haar-like features
   val numFeatures = 1000
@@ -54,7 +56,7 @@ object Trainer extends App {
     println(feature.toString)
     
     //save the calculated feature to a file
-    File.appendToFile("features.txt", feature.toFileString+"\n")
+    File.appendToFile(filename, feature.toFileString+"\n")
   }
   
 //  choose the top 1000 features with the lowest error rates (this is the cascade)
