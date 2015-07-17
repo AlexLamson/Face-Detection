@@ -1,16 +1,18 @@
 package detector
 
-import file._
-
 object Trainer extends App {
-  println("trainer starting")
-  val startTime = System.currentTimeMillis
   
-  val filename = "features.txt"
+  train()
   
-  val (winWidth, winHeight) = (19, 19)
+  def train(filename:String="features.txt", 
+      facesDir:String="res/face_db_3/train/face", 
+      nonFacesDir:String="res/face_db_3/train/non-face") {
+    ???
+  }
   
-  val haarList = (1 to 10).map{ Haar.random(winWidth, winHeight) }
+  def generateHaars(count:Int):List[Haar] = ???
   
+  def updateHaarsAndWeights():List[(Haar, Double)] = ???
   
+  def writeHaarsAndWeightsToFile(haars:List[(Haar, Double)]) = ???
 }

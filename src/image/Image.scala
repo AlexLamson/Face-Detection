@@ -147,15 +147,16 @@ class Image(val img:BImage) extends Iterable[Color]{
   def subImage(x:Int, y:Int, w:Int, h:Int) = new Image(img.getSubimage(0, 0, w, h))
   
   //copy the whole image, pixel by pixel
-  def copy:Image = new Image(copyBImage)
-  private def copyBImage = {
+  def copy():Image = new Image(copyBImage())
+  private def copyBImage() = {
     var newImg = new BImage(width, height, BImage.TYPE_INT_RGB)
     for(y <- 0 to height-1; x <- 0 to width-1)
       newImg.setRGB(x, y, get(x,y).rgb)
     newImg
   }
   
-  def g = img.getGraphics
+  //WARNING - MAY INTRODUCE SIDE EFFECTS
+  def g() = img.getGraphics
   
   //change every color into an int in range [0,255]
   def to2dIntArray() = {

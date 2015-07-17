@@ -1,9 +1,10 @@
 package detector
 
-import image.Image
+import image._
+import Helpers._
 
 class IntegralImage(var arr:Array[Array[Int]]) {
-  def this(img:Image) = this(img.to2dIntArray)
+  def this(img:Image) = this(img.to2dIntArray())
   
   val width = arr(0).length
   val height = arr.length
@@ -36,29 +37,45 @@ class IntegralImage(var arr:Array[Array[Int]]) {
   }
   
   //give the sum of all the cells in the given rectangle
-  def sumRegion(x:Int, y:Int, width:Int, height:Int) = {
-    
-    val (w,h) = (this.width, this.height)
+  def getSum(r:Rect):Int = {
+//    val (x, y, w, h) = r
+    val (x, y, w, h) = (r.x, r.y, r.w, r.h)
     
     assert(x >= 0, s"x: $x width: $width w: $w")
-    assert(x+width < this.width, s"x: $x width: $width w: $w")
+    assert(x+w < this.width, s"x: $x width: $width w: $w")
     assert(y >= 0, s"y: $y height: $height h: $h")
-    assert(y+height < this.height, s"y: $y height: $height h: $h")
+    assert(y+h < this.height, s"y: $y height: $height h: $h")
     
     //AB
     //CD
     val A = topLeft(x, y)
-    val B = top(x+width, y)
-    val C = left(x, y+height)
+    val B = top(x+w, y)
+    val C = left(x, y+h)
     val D = arr(y)(x)
     
     D - C - B + A
   }
   
+  //copy section of array into a new integral image object
+  def subRegion(r:Rect):IntegralImage = {
+//    val (x, y, w, h) = r
+    val (x, y, w, h) = (r.x, r.y, r.w, r.h)
+    
+    val intImgSave = new IntegralImage(Array.ofDim[Int](h, w))
+    for(dy <- y to y+h-1; dx <- x to x+w-1)
+  intImgSave.arr(dy-y)(dx-x) = arr(dy)(dx)
+    intImgSave
+  }
+  
+  def getDiff(haar:Haar, x:Int=0, y:Int=0) = ???
+  
+  //returns summed area table as an array
+  def toArray():Array[Array[Int]] = arr
+
   override def toString = {
     val rows = for{
       row <- arr
     } yield row.mkString(",")
     rows.mkString("\n")
-  } 
+  }
 }

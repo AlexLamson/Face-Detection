@@ -52,8 +52,8 @@ object File{
     else List(file)
   }
   
-  def randomFile(dir:String):JFile = randomFile(toJFile(dir))
-  def randomFile(dir:JFile):JFile = Random.shuffle( getFilesIn(dir) ).head
+  private def randomFile(dir:String):JFile = randomFile(toJFile(dir))
+  private def randomFile(dir:JFile):JFile = Random.shuffle( getFilesIn(dir) ).head
   
   def imageIterator(dir:String):Iterator[Image] = imageIterator(toJFile(dir))
   def imageIterator(dir:JFile) = new Iterator[Image] {
