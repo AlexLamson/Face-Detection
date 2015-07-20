@@ -28,7 +28,19 @@ class FaceDetectionSuite extends FunSuite {
 //    assert(intImg.arr == summedArr)
   }
   
-  test("IntImg - integral image sums sub-regions correctly") {
+  test("IntImg - integral image sums regions properly") {
+    val img = Image.from2dIntArray(arrTrue)
+    val intImg = new IntegralImage(img)
+    
+    assert(intImg.getSum((0, 0, 2, 2)) == 5+2+3+6)
+    assert(intImg.getSum((1, 1, 2, 2)) == 6+3+2+5)
+    assert(intImg.getSum((0, 0, 4, 4)) == 5+2+5+2+3+6+3+6+5+2+5+2+3+6+3+6)
+    assert(intImg.getSum((2, 2, 2, 2)) == 5+2+3+6)
+    assert(intImg.getSum((0, 0, 1, 4)) == 5+3+5+3)
+    assert(intImg.getSum((0, 0, 4, 1)) == 5+2+5+2)
+  }
+  
+  test("IntImg - integral image gets sub-regions correctly") {
     val img = Image.from2dIntArray(arrTrue)
     val intImg = new IntegralImage(img)
     val summedArr = intImg.toArray()
@@ -37,22 +49,46 @@ class FaceDetectionSuite extends FunSuite {
     val subRegion1 = intImg.subRegion(rect1).toArray()
     val subRegion1True = Array(Array(23,36,46),
                                Array(32,48,64))
-    for(i <- 0 to 1; j <- 0 to 2)
+    for(i <- 0 to subRegion1True.length-1; j <- 0 to subRegion1True(0).length-1)
       assert(subRegion1(i)(j) == subRegion1True(i)(j))
     
   }
   
-  test("IntImg - haar diffs correctly even when offset") {
+  test("IntImg - integral image gets sub-regions at bounds correctly") {
     val img = Image.from2dIntArray(arrTrue)
     val intImg = new IntegralImage(img)
+    val summedArr = intImg.toArray()
     
-    val rect1 = new Rect(1, 1, Haar.w, Haar.h)
-    val intImg1 = new IntegralImage(img).subRegion(rect1)
+    val rect1 = new Rect(2, 2, 2, 2)
+    val subRegion1 = intImg.subRegion(rect1).toArray()
+    val subRegion1True = Array(Array(36,46),
+                               Array(48,64))
+    for(i <- 0 to subRegion1True.length-1; j <- 0 to subRegion1True(0).length-1)
+      assert(subRegion1(i)(j) == subRegion1True(i)(j))
     
-    val r1 = new Rect(0, 0, 1, 3) //14
-    val r2 = new Rect(1, 0, 1, 3) //11
+    val rect2 = new Rect(0, 0, 4, 4)
+    val subRegion2 = intImg.subRegion(rect2).toArray()
+    val subRegion2True = summedArrTrue
+    for(i <- 0 to subRegion2True.length-1; j <- 0 to subRegion2True(0).length-1)
+      assert(subRegion2(i)(j) == subRegion2True(i)(j))
+  }
+  
+  test("IntImg - haar diffs correctly even when offset") {
+    val img = Image.from2dIntArray(arrTrue)
+    
+    val rect1 = new Rect(1, 1, 3, 3)
+    val intImg = new IntegralImage(img).subRegion(rect1)
+    
+//    (6,3,6),
+//    (2,5,2),
+//    (6,3,6))
+    
+    val r1 = new Rect(0, 0, 1, 3) //6+2+6
+    val r2 = new Rect(1, 0, 1, 3) //3+5+3
     val haar = new Haar(r1, r2)
-    assert(haar.getDiff(intImg) == 14-11)
+    val diff = haar.getDiff(intImg)
+    val expected = (6+2+6)-(3+5+3)
+    assert(diff == expected, "["+(6+2+6)+" - "+(3+5+3)+"]")
     
   }
   
@@ -61,10 +97,15 @@ class FaceDetectionSuite extends FunSuite {
     val img = Image.from2dIntArray(arrTrue)
     val intImg = new IntegralImage(img)
     
-    val r1 = new Rect(0, 0, 2, 2) //16
-    val r2 = new Rect(2, 2, 2, 2) //16
+//  (5,2,5,2),
+//  (3,6,3,6),
+//  (5,2,5,2),
+//  (3,6,3,6))
+    
+    val r1 = new Rect(0, 0, 1, 3) //5+3+5+2+6+2
+    val r2 = new Rect(1, 1, 3, 2) //6+3+6+2+5+2
     val haar = new Haar(r1, r2)
-    assert(haar.getDiff(intImg) == 16+16)
+    assert(haar.getDiff(intImg) == (5+3+5+2+6+2)-(6+3+6+2+5+2))
     
   }
   
