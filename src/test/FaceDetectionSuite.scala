@@ -50,10 +50,12 @@ class FaceDetectionSuite extends FunSuite {
 //  (5,2,5,2),
 //  (3,6,3,6))
     
-    val r1 = new Rect(0, 0, 1, 3) //5+3+5+2+6+2
-    val r2 = new Rect(1, 1, 3, 2) //6+3+6+2+5+2
+    val r1 = new Rect(0, 0, 2, 3)
+    val r1Sum = 5+3+5+2+6+2
+    val r2 = new Rect(1, 1, 3, 2)
+    val r2Sum = 6+3+6+2+5+2
     val haar = new Haar(r1, r2)
-    assert(haar.getDiff(intImg) == (5+3+5+2+6+2)-(6+3+6+2+5+2))
+    assert(haar.getDiff(intImg) == r1Sum-r2Sum, "expected "+r1Sum+" & "+r2Sum)
     
   }
   

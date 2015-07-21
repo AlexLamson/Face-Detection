@@ -52,19 +52,23 @@ class IntegralImage(var arr:Array[Array[Int]]) {
     val C = left(x, y+h-1)
     val D = get(x+w-1, y+h-1)
     
+    
+    println("summing region: "+r+" => "+(D-C-B+A))
+    println("corners: "+(A, B, C, D))
+    
     D - C - B + A
   }
   
-  //copy section of array into a new integral image object
-  def subRegion(r:Rect):IntegralImage = {
-    val (x, y, w, h) = r
-    
-    val intImgSave = new IntegralImage(Array.ofDim[Int](h, w))
-    for(dy <- y to y+h-1; dx <- x to x+w-1)
-      intImgSave.arr(dy-y)(dx-x) = arr(dy)(dx)
-    
-    intImgSave
-  }
+//  //copy section of array into a new integral image object
+//  def subRegion(r:Rect):IntegralImage = {
+//    val (x, y, w, h) = r
+//    
+//    val intImgSave = new IntegralImage(Array.ofDim[Int](h, w))
+//    for(dy <- y to y+h-1; dx <- x to x+w-1)
+//      intImgSave.arr(dy-y)(dx-x) = arr(dy)(dx)
+//    
+//    intImgSave
+//  }
   
   def getDiff(haar:Haar, x:Int=0, y:Int=0) = ???
   
