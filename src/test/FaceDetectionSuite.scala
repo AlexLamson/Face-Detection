@@ -40,58 +40,6 @@ class FaceDetectionSuite extends FunSuite {
     assert(intImg.getSum((0, 0, 4, 1)) == 5+2+5+2)
   }
   
-  test("IntImg - integral image gets sub-regions correctly") {
-    val img = Image.from2dIntArray(arrTrue)
-    val intImg = new IntegralImage(img)
-    val summedArr = intImg.toArray()
-    
-    val rect1 = new Rect(1, 2, 3, 2)
-    val subRegion1 = intImg.subRegion(rect1).toArray()
-    val subRegion1True = Array(Array(23,36,46),
-                               Array(32,48,64))
-    for(i <- 0 to subRegion1True.length-1; j <- 0 to subRegion1True(0).length-1)
-      assert(subRegion1(i)(j) == subRegion1True(i)(j))
-    
-  }
-  
-  test("IntImg - integral image gets sub-regions at bounds correctly") {
-    val img = Image.from2dIntArray(arrTrue)
-    val intImg = new IntegralImage(img)
-    val summedArr = intImg.toArray()
-    
-    val rect1 = new Rect(2, 2, 2, 2)
-    val subRegion1 = intImg.subRegion(rect1).toArray()
-    val subRegion1True = Array(Array(36,46),
-                               Array(48,64))
-    for(i <- 0 to subRegion1True.length-1; j <- 0 to subRegion1True(0).length-1)
-      assert(subRegion1(i)(j) == subRegion1True(i)(j))
-    
-    val rect2 = new Rect(0, 0, 4, 4)
-    val subRegion2 = intImg.subRegion(rect2).toArray()
-    val subRegion2True = summedArrTrue
-    for(i <- 0 to subRegion2True.length-1; j <- 0 to subRegion2True(0).length-1)
-      assert(subRegion2(i)(j) == subRegion2True(i)(j))
-  }
-  
-  test("IntImg - haar diffs correctly even when offset") {
-    val img = Image.from2dIntArray(arrTrue)
-    
-    val rect1 = new Rect(1, 1, 3, 3)
-    val intImg = new IntegralImage(img).subRegion(rect1)
-    
-//    (6,3,6),
-//    (2,5,2),
-//    (6,3,6))
-    
-    val r1 = new Rect(0, 0, 1, 3) //6+2+6
-    val r2 = new Rect(1, 0, 1, 3) //3+5+3
-    val haar = new Haar(r1, r2)
-    val diff = haar.getDiff(intImg)
-    val expected = (6+2+6)-(3+5+3)
-    assert(diff == expected, "["+(6+2+6)+" - "+(3+5+3)+"]")
-    
-  }
-  
   test("Haar - haar diffs correctly") {
     //https://youtu.be/Wwn81tVIR10?t=4m50s
     val img = Image.from2dIntArray(arrTrue)
