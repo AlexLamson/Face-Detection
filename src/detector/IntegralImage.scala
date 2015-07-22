@@ -37,20 +37,20 @@ class IntegralImage(var arr:Array[Array[Int]]) {
   }
   
   //give the sum of all the cells in the given rectangle
-  def getSum(r:Rect):Int = {
+  def getSum(r:Rect, dx:Int=0, dy:Int=0):Int = {
     val (x, y, w, h) = r
     
-    assert(x >= 0, s"x: $x width: $width w: $w")
-    assert(x+w <= this.width, s"x: $x width: $width w: $w")
-    assert(y >= 0, s"y: $y height: $height h: $h")
-    assert(y+h <= this.height, s"y: $y height: $height h: $h")
+    assert(dx+x >= 0, s"x: $x width: $width w: $w dx: $dx")
+    assert(dx+x+w <= this.width, s"x: $x width: $width w: $w dx: $dx")
+    assert(dy+y >= 0, s"y: $y height: $height h: $h dy: $dy")
+    assert(dy+y+h <= this.height, s"y: $y height: $height h: $h dy: $dy")
     
     //AB
     //CD
-    val A = topLeft(x, y)
-    val B = top(x+w-1, y)
-    val C = left(x, y+h-1)
-    val D = get(x+w-1, y+h-1)
+    val A = topLeft(dx+x, dy+y)
+    val B = top(dx+x+w-1, dy+y)
+    val C = left(dx+x, dy+y+h-1)
+    val D = get(dx+x+w-1, dy+y+h-1)
     
     
     println("summing region: "+r+" => "+(D-C-B+A))
@@ -58,17 +58,6 @@ class IntegralImage(var arr:Array[Array[Int]]) {
     
     D - C - B + A
   }
-  
-//  //copy section of array into a new integral image object
-//  def subRegion(r:Rect):IntegralImage = {
-//    val (x, y, w, h) = r
-//    
-//    val intImgSave = new IntegralImage(Array.ofDim[Int](h, w))
-//    for(dy <- y to y+h-1; dx <- x to x+w-1)
-//      intImgSave.arr(dy-y)(dx-x) = arr(dy)(dx)
-//    
-//    intImgSave
-//  }
   
   def getDiff(haar:Haar, x:Int=0, y:Int=0) = ???
   

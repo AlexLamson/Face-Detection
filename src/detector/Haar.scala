@@ -6,10 +6,10 @@ class Haar(val white:Rect, val black:Rect) {
   var threshold = 0
   var lessThan = true
   
-  def getDiff(intImg:IntegralImage):Int = {
+  def getDiff(intImg:IntegralImage, dx:Int=0, dy:Int=0):Int = {
 //    intImg.getSum(white)-intImg.getSum(black)
-    val whiteSum = intImg.getSum(white)
-    val blackSum = intImg.getSum(black)
+    val whiteSum = intImg.getSum(white, dx, dy)
+    val blackSum = intImg.getSum(black, dx, dy)
     println("whiteSum: "+whiteSum+" blackSum: "+blackSum)
     whiteSum-blackSum
   }

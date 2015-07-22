@@ -18,7 +18,7 @@ class FaceDetectionSuite extends FunSuite {
                             Array(13,23,36,46),
                             Array(16,32,48,64))
   
-  test("IntImg - integral image is created correctly") {
+  test("IntImg - integral image is created") {
     val img = Image.from2dIntArray(arrTrue)
     val intImg = new IntegralImage(img)
     val summedArr = intImg.toArray()
@@ -28,7 +28,7 @@ class FaceDetectionSuite extends FunSuite {
 //    assert(intImg.arr == summedArr)
   }
   
-  test("IntImg - integral image sums regions properly") {
+  test("IntImg - integral image sums regions") {
     val img = Image.from2dIntArray(arrTrue)
     val intImg = new IntegralImage(img)
     
@@ -38,6 +38,19 @@ class FaceDetectionSuite extends FunSuite {
     assert(intImg.getSum((2, 2, 2, 2)) == 5+2+3+6)
     assert(intImg.getSum((0, 0, 1, 4)) == 5+3+5+3)
     assert(intImg.getSum((0, 0, 4, 1)) == 5+2+5+2)
+  }
+  
+  test("IntImg - integral image sums with an offset") {
+    val img = Image.from2dIntArray(arrTrue)
+    val intImg = new IntegralImage(img)
+    
+//  (5,2,5,2)
+//  (3,6,3,6)
+//  (5,2,5,2)
+//  (3,6,3,6)
+    
+    assert(intImg.getSum((0, 0, 3, 3), dx=1, dy=1) == 6+3+6+2+5+2+6+3+6)
+    assert(intImg.getSum((0, 0, 2, 4), dx=2, dy=0) == 5+2+3+6+5+2+3+6)
   }
   
   test("Haar - haar diffs correctly") {
@@ -57,6 +70,23 @@ class FaceDetectionSuite extends FunSuite {
     val haar = new Haar(r1, r2)
     assert(haar.getDiff(intImg) == r1Sum-r2Sum, "expected "+r1Sum+" & "+r2Sum)
     
+  }
+  
+  test("Haar - haar diffs with an offset") {
+    val img = Image.from2dIntArray(arrTrue)
+    val intImg = new IntegralImage(img)
+    
+//  (5,2,5,2)
+//  (3,6,3,6)
+//  (5,2,5,2)
+//  (3,6,3,6)
+    
+    val r1 = new Rect(0, 0, 2, 3)
+    val r1Sum = 6+3+2+5+6+3
+    val r2 = new Rect(1, 1, 2, 2)
+    val r2Sum = 5+2+3+6
+    val haar = new Haar(r1, r2)
+    assert(haar.getDiff(intImg, dx=1, dy=1) == r1Sum-r2Sum, "expected "+r1Sum+" & "+r2Sum)
   }
   
   test("Haar - serialization matches deserialization") {
