@@ -19,7 +19,7 @@ class Haar(val white:Rect, val black:Rect) {
   def serialize():String = white+" "+black+" "+threshold+" "+lessThan
 }
 object Haar {
-  val (w, h) = (19, 19)
+  val (width, height) = (19, 19)
   
   def deserialize(s:String):Haar = {
     val terms = s.split(" ")
@@ -36,7 +36,30 @@ object Haar {
     haar
   }
   
-  def random():Haar = ???
+  def random():Haar = {
+    //generate random int in the range [min, max]
+    def rand(min:Int, max:Int) = (math.random*(max-min)+min).toInt
+    
+    val minWidth = 4
+    val minHeight = 4
+    
+    val centerX = rand(minWidth/2, width-minWidth/2)
+    val centerY = rand(minHeight/2, height-minHeight/2)
+    val w = rand(minWidth, math.min(centerX*2, (width-centerX)*2)-1)
+    val h = rand(minHeight, math.min(centerY*2, (height-centerY)*2)-1)
+    val x = centerX-w/2
+    val y = centerY-h/2
+    
+    val hasHorzStripes = math.random < 0.5
+    val hasTwoStripes = math.random < 0.5
+    
+    (hasTwoStripes, hasHorzStripes) match {
+      case (true, true) => new Haar((x, y, w, h/2), (x, y+h/2, w, h/2))
+      case (true, false) => new Haar((x, y, w/2, h), (x+w/2, y, w/2, h))
+      case (false, true) => new Haar((x, y, w, h), (x, y+h/3, w, h/3))
+      case (false, false) => new Haar((x, y, w, h), (x+w/3, y, w/3, h))
+    }
+  }
 }
 
 //class Rect(val x:Int, val y:Int, val w:Int, val h:Int) {
