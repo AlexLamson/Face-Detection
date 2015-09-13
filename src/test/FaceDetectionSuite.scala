@@ -89,6 +89,15 @@ class FaceDetectionSuite extends FunSuite {
     assert(haar.getDiff(intImg, dx=1, dy=1) == r1Sum-r2Sum, "expected "+r1Sum+" & "+r2Sum)
   }
   
+  test("Rect - serialization matches deserialization") {
+    val rect = new Rect(1, 2, 3, 4)
+    val rect2 = Rect.deserialize(rect.serialize())
+    
+    assert(rect == rect2)
+    assert(rect.toString() == rect2.toString())
+    assert(rect.serialize() == rect2.serialize())
+  }
+  
   test("Haar - serialization matches deserialization") {
     val originalHaar = Haar.random()
     val originalString = originalHaar.serialize()
